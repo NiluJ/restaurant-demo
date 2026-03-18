@@ -24,6 +24,14 @@ jobs:
           cd backend
           npm install
 
+      # 🔥 THIS WAS MISSING
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_CBA1D687FADE4C539D72EB456D03754F }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_FE73FC7DA5C341089FF9791D21A33EE9 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_0CA361643E6B43D7808D88CAD9FB0A28 }}
+
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
