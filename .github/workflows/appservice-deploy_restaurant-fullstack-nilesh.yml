@@ -1,40 +1,35 @@
-name: Build and deploy Node.js app to Azure Web App - restaurant-fullstack-nilesh
+name: Deploy Node.js Backend to Azure App Service
 
 on:
   push:
     branches:
       - appservice-deploy
-  workflow_dispatch:
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: '20.x'
+          node-version: '20'
 
-      - name: Install dependencies
+      - name: Install Dependencies (Backend)
         run: |
           cd backend
           npm install
 
-      # 🔥 THIS WAS MISSING
-      - name: Login to Azure
+      - name: Azure Login
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_CBA1D687FADE4C539D72EB456D03754F }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_FE73FC7DA5C341089FF9791D21A33EE9 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_0CA361643E6B43D7808D88CAD9FB0A28 }}
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'restaurant-fullstack-nilesh'
-          slot-name: 'Production'
-          package: backend
+          app-name: restaurant-fullstack-nilesh
+          package: ./backend
